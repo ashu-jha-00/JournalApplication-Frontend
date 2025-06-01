@@ -8,8 +8,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
+  const [success, setSuccess] = useState('');  
   const handleSubmit = async () => {
     // Reset states
     setError('');
@@ -22,9 +21,11 @@ export default function LoginForm() {
     }
     
     setLoading(true);
-    
-    try {
-      const response = await fetch('http://localhost:8080/create-user', {
+      try {
+      // Choose the right endpoint based on the active tab
+      const endpoint = activeTab === 'login' ? 'login' : 'create-user';
+      
+      const response = await fetch(`http://localhost:8080/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,11 +34,20 @@ export default function LoginForm() {
           username: email,
           password: password
         }),
-      });
-      
-      // Check if response is OK before trying to parse JSON
+      });      // Check if response is OK before trying to parse JSON
       if (!response.ok) {
-        throw new Error(`Server responded with status: ${response.status}`);
+        if (response.status === 401 && activeTab === 'login') {
+          throw new Error('Invalid credentials. Please check your username and password.');
+        } else if (activeTab === 'signup') {
+          // Handle signup-specific errors
+          if (response.status === 409) {
+            throw new Error('Username already exists. Please choose a different one.');
+          } else {
+            throw new Error('Failed to create user. Please try again.');
+          }
+        } else {
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
       }
       
       // Check if there's content before parsing
@@ -49,10 +59,11 @@ export default function LoginForm() {
           data = await response.json();
         } catch (jsonError) {
           console.error('Error parsing JSON:', jsonError);
-          throw new Error('Invalid response format from server');
+          // Don't throw for empty responses, just continue with empty data object
         }
       }
-        setSuccess(activeTab === 'login' ? 'Login successful!' : 'Account created successfully!');
+      
+      setSuccess(activeTab === 'login' ? 'Login successful!' : 'Account created successfully!');
       console.log('API response:', data);
       
       // Store user info in localStorage if available
