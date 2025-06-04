@@ -5,6 +5,7 @@
 @import './styles/theme.css';
 @import './styles/components.css';
 @import './styles/loading-spinner.css';
+@import './styles/fullheight-fix.css';
 
 :root {
   font-family: var(--font-family);
@@ -39,6 +40,7 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
+  height: 100vh;
   background-color: var(--neutral-50);
   font-family: var(--font-family);
   width: 100%;
@@ -47,6 +49,7 @@ body {
 
 #root {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;

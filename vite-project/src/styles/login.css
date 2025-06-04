@@ -1,8 +1,16 @@
 /* Login page specific styles */
 
 /* Global fixes for the login page */
-body {
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
+}
+
+/* When on login page, ensure body has the same background to prevent flashing */
+body.login-page {
+  background-color: #111827; /* Same as login-container */
 }
 
 /* Target large standalone SVGs (lock, user icon) */
@@ -39,6 +47,9 @@ svg:not([class]) {
 .login-container {
   overflow: hidden;
   max-width: 100vw;
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,0 +1,29 @@
+/* Full height viewport fixes */
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* For login page */
+.login-container {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  overflow-y: auto;
+}
+
+/* Prevent unwanted margins that might cause scrolling */
+.login-container > * {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Force background for login page */
+body.login-page, 
+body.login-page #root {
+  background-color: #111827 !important; /* Same as the login-container */
+}

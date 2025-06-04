@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -8,9 +8,18 @@ export default function LoginForm() {
   const [activeTab, setActiveTab] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  // Add login-page class to body when component mounts
+  useEffect(() => {
+    document.body.classList.add('login-page');
+    
+    // Remove the class when component unmounts
+    return () => {
+      document.body.classList.remove('login-page');
+    };
+  }, []);
   
   const handleSubmit = async () => {
     // Reset states
@@ -58,8 +67,8 @@ export default function LoginForm() {
     height: '16px', 
     flexShrink: 0
   };
-    return (
-    <div className="min-h-screen flex flex-col items-center justify-center w-full bg-gray-900 text-white login-container">
+  return (
+    <div className="h-full min-h-screen flex flex-col items-center justify-center w-full text-white login-container">
       <div className="text-center mb-6 w-full max-w-sm mx-auto">
         <h1 className="text-2xl font-bold mb-8">Welcome to Your Journal</h1>
         
