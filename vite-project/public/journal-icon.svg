@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>JournalApp Icon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M6,2 C4.89543,2 4,2.89543 4,4 L4,20 C4,21.1046 4.89543,22 6,22 L18,22 C19.1046,22 20,21.1046 20,20 L20,8 L14,2 L6,2 Z" fill="#a855f7" fill-rule="nonzero"/>
+        <path d="M14,2 L14,8 L20,8 L14,2 Z" fill="#ec4899" fill-rule="nonzero"/>
+        <path d="M7,13 C7,12.4477 7.44772,12 8,12 L16,12 C16.5523,12 17,12.4477 17,13 C17,13.5523 16.5523,14 16,14 L8,14 C7.44772,14 7,13.5523 7,13 Z" fill="#ffffff" fill-rule="nonzero"/>
+        <path d="M7,17 C7,16.4477 7.44772,16 8,16 L16,16 C16.5523,16 17,16.4477 17,17 C17,17.5523 16.5523,18 16,18 L8,18 C7.44772,18 7,17.5523 7,17 Z" fill="#ffffff" fill-rule="nonzero"/>
+    </g>
+</svg>

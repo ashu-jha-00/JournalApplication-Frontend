@@ -1,0 +1,66 @@
+/* Special fix for oversized SVG elements */
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Normalize all SVGs */
+svg {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+
+/* Target large root SVGs that could cause layout problems */
+body > svg, 
+#root > svg, 
+.fixed > svg, 
+.absolute > svg,
+div:only-child > svg:not(.icon-xs):not(.icon-sm):not(.icon-md):not(.icon-lg):not(.message-icon):not(.user-icon):not(.lock-icon):not(.spinner-icon) {
+  max-width: 250px;
+  max-height: 250px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+}
+
+/* Extra constraints for SVGs with no specific sizing */
+svg:not([class]) {
+  max-width: min(250px, 90vw);
+  max-height: 250px;
+}
+
+/* Specific fix for user and lock icons in login form */
+.login-container .input-icon svg,
+.login-container .user-icon,
+.login-container .lock-icon {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  display: inline-flex;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Fix for message icons */
+.login-container .message-icon {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  flex-shrink: 0;
+}
+
+/* Preserve specific icon sizes */
+.icon-xs, .icon-sm, .icon-md, .icon-lg, .empty-state-icon,
+.user-icon, .lock-icon, .message-icon, .spinner-icon {
+  /* Allow these to have their own dedicated sizes */
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+}

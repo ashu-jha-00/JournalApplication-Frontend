@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const { login, signup, error: authError } = useAuth();
   const [activeTab, setActiveTab] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');  
+  const [success, setSuccess] = useState('');
+  
   const handleSubmit = async () => {
     // Reset states
     setError('');
@@ -21,334 +24,153 @@ export default function LoginForm() {
     }
     
     setLoading(true);
-      try {
-      // Choose the right endpoint based on the active tab
-      const endpoint = activeTab === 'login' ? 'login' : 'create-user';
+    
+    try {
+      let result;
       
-      const response = await fetch(`http://localhost:8080/${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: email,
-          password: password
-        }),
-      });      // Check if response is OK before trying to parse JSON
-      if (!response.ok) {
-        if (response.status === 401 && activeTab === 'login') {
-          throw new Error('Invalid credentials. Please check your username and password.');
-        } else if (activeTab === 'signup') {
-          // Handle signup-specific errors
-          if (response.status === 409) {
-            throw new Error('Username already exists. Please choose a different one.');
-          } else {
-            throw new Error('Failed to create user. Please try again.');
-          }
-        } else {
-          throw new Error(`Server responded with status: ${response.status}`);
-        }
+      if (activeTab === 'login') {
+        result = await login(email, password);
+      } else {
+        result = await signup(email, password);
       }
       
-      // Check if there's content before parsing
-      const contentType = response.headers.get("content-type");
-      let data = {};
-      
-      if (contentType && contentType.includes("application/json") && response.status !== 204) {
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          console.error('Error parsing JSON:', jsonError);
-          // Don't throw for empty responses, just continue with empty data object
-        }
+      if (result) {
+        setSuccess(activeTab === 'login' ? 'Login successful!' : 'Account created successfully!');
+        
+        // Navigate to dashboard after a brief delay to show the success message
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
+      } else {
+        setError(authError || 'Authentication failed. Please try again.');
       }
-      
-      setSuccess(activeTab === 'login' ? 'Login successful!' : 'Account created successfully!');
-      console.log('API response:', data);
-      
-      // Store user info in localStorage if available
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-      }
-      if (data.userId) {
-        localStorage.setItem('userId', data.userId);
-      }
-      localStorage.setItem('username', email);
-      
-      // Navigate to home page after a brief delay to show the success message
-      setTimeout(() => {
-        navigate('/home');
-      }, 1000);
     } catch (err) {
-      console.error('Error during request:', err);
+      console.error('Error during authentication:', err);
       setError(err.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  return (
-    <div 
-      className="flex items-center justify-center p-4"
-      style={{
-        background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f472b6 100%)',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
-      }}
-    >
-      <div 
-        className="max-w-md"
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '12px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          padding: '32px'
-        }}
-      >
-        {/* Header */}
-        <h2 
-          className="text-center mb-6"
-          style={{
-            fontSize: '24px',
-            fontWeight: '700',
-            color: '#1f2937',
-            margin: '0 0 24px 0'
-          }}
-        >
-          Login Form
-        </h2>
-
-        {/* Tab Navigation */}
-        <div 
-          className="flex mb-6"
-          style={{
-            display: 'flex',
-            marginBottom: '24px',
-            borderRadius: '6px',
-            overflow: 'hidden'
-          }}
-        >
+  
+  // Icon style for user and lock icons
+  const iconStyle = { 
+    width: '16px', 
+    height: '16px', 
+    flexShrink: 0
+  };
+    return (
+    <div className="min-h-screen flex flex-col items-center justify-center w-full bg-gray-900 text-white login-container">
+      <div className="text-center mb-6 w-full max-w-sm mx-auto">
+        <h1 className="text-2xl font-bold mb-8">Welcome to Your Journal</h1>
+        
+        <div className="inline-flex space-x-6 mb-8 tab-container">
           <button
             onClick={() => setActiveTab('login')}
-            style={{
-              flex: '1',
-              padding: '12px 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              backgroundColor: activeTab === 'login' ? '#a855f7' : '#f3f4f6',
-              color: activeTab === 'login' ? '#ffffff' : '#6b7280',
-              borderTopLeftRadius: '6px',
-              borderBottomLeftRadius: '6px'
-            }}
+            className={`px-6 py-2 text-sm rounded-md ${activeTab === 'login' ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
           >
             Login
           </button>
           <button
             onClick={() => setActiveTab('signup')}
-            style={{
-              flex: '1',
-              padding: '12px 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              backgroundColor: activeTab === 'signup' ? '#a855f7' : '#f3f4f6',
-              color: activeTab === 'signup' ? '#ffffff' : '#6b7280',
-              borderTopRightRadius: '6px',
-              borderBottomRightRadius: '6px'
-            }}
+            className={`px-6 py-2 text-sm rounded-md ${activeTab === 'signup' ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
           >
-            Signup
+            Create Account
           </button>
         </div>
-
-        {/* Error and Success Messages */}
-        {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            color: '#b91c1c',
-            padding: '12px',
-            borderRadius: '6px',
-            marginBottom: '16px',
-            fontSize: '14px'
-          }}>
-            {error}
-          </div>
-        )}
         
-        {success && (
-          <div style={{
-            backgroundColor: '#dcfce7',
-            color: '#15803d',
-            padding: '12px',
-            borderRadius: '6px',
-            marginBottom: '16px',
-            fontSize: '14px'
-          }}>
-            {success}
-          </div>
-        )}
-
-        {/* Form */}
-        <div style={{ marginBottom: '16px' }}>
-          {/* Username Input - changed from Email Input */}
-          <div style={{ marginBottom: '16px' }}>
+        <div className="w-full max-w-xs mx-auto input-field-container">
+          {error && <div className="text-red-500 mb-4 text-sm message-container">
+            <svg className="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{color: '#ef4444'}}>
+              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+            </svg>
+            <span>{error}</span>
+          </div>}
+          
+          {success && <div className="text-green-500 mb-4 text-sm message-container">
+            <svg className="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{color: '#22c55e'}}>
+              <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+            </svg>
+            <span>{success}</span>
+          </div>}
+          
+          <div className="mb-5 text-left">
+            <div className="flex items-center mb-2 input-icon">
+              <span className="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="user-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </span>
+              <label htmlFor="email" className="text-sm">Username</label>
+            </div>
             <input
               type="text"
-              placeholder="Username"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                fontSize: '14px',
-                outline: 'none',
-                transition: 'all 0.2s',
-                boxSizing: 'border-box',
-                fontFamily: 'inherit'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#a855f7';
-                e.target.style.boxShadow = '0 0 0 3px rgba(168, 85, 247, 0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e5e7eb';
-                e.target.style.boxShadow = 'none';
-              }}
-              required
+              className="w-full p-3 bg-white text-black text-sm rounded-md"
+              disabled={loading}
             />
           </div>
-
-          {/* Password Input */}
-          <div style={{ marginBottom: '16px' }}>
+          
+          <div className="mb-8 text-left">
+            <div className="flex items-center mb-2 input-icon">
+              <span className="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="lock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </span>
+              <label htmlFor="password" className="text-sm">Password</label>
+            </div>
             <input
+              id="password"
               type="password"
-              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                fontSize: '14px',
-                outline: 'none',
-                transition: 'all 0.2s',
-                boxSizing: 'border-box',
-                fontFamily: 'inherit'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#a855f7';
-                e.target.style.boxShadow = '0 0 0 3px rgba(168, 85, 247, 0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e5e7eb';
-                e.target.style.boxShadow = 'none';
-              }}
-              required
+              className="w-full p-3 bg-white text-black text-sm rounded-md"
+              disabled={loading}
             />
           </div>
-
-          {/* Forgot Password Link */}
+            <button
+            type="button"
+            onClick={handleSubmit}
+            className="action-button w-full py-3 px-4 rounded-md text-sm font-medium mb-6"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                Processing...
+              </>
+            ) : (
+              activeTab === 'login' ? 'Sign in to your journal' : 'Create your account'
+            )}
+          </button>
+          
           {activeTab === 'login' && (
-            <div style={{ textAlign: 'left', marginBottom: '20px' }}>
-              <button
-                type="button"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#ec4899',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  padding: '0',
-                  fontFamily: 'inherit'
-                }}
-                onMouseOver={(e) => e.target.style.color = '#db2777'}
-                onMouseOut={(e) => e.target.style.color = '#ec4899'}
+            <div className="mt-6 text-sm">
+              <p className="mb-4">Don't have an account?</p>              <button 
+                onClick={() => setActiveTab('signup')} 
+                className="py-2 px-6 bg-white text-black text-sm rounded-md hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
-                Forgot password?
+                Create one now
               </button>
             </div>
           )}
-
-          {/* Submit Button */}
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{
-              width: '100%',
-              background: loading ? '#d1d5db' : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-              color: loading ? '#6b7280' : '#ffffff',
-              padding: '12px 16px',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s',
-              fontFamily: 'inherit',
-              boxSizing: 'border-box',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            onMouseOver={(e) => {
-              if (!loading) {
-                e.target.style.background = 'linear-gradient(135deg, #9333ea 0%, #db2777 100%)';
-                e.target.style.transform = 'scale(1.02)';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (!loading) {
-                e.target.style.background = 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)';
-                e.target.style.transform = 'scale(1)';
-              }
-            }}
-          >
-            {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Processing...
-              </span>
-            ) : (
-              activeTab === 'login' ? 'Login' : 'Sign Up'
-            )}
-          </button>
+          
+          {activeTab === 'signup' && (
+            <div className="mt-6 text-sm">
+              <p className="mb-4">Already have an account?</p>              <button 
+                onClick={() => setActiveTab('login')} 
+                className="py-2 px-6 bg-white text-black text-sm rounded-md hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              >
+                Sign in instead
+              </button>
+            </div>
+          )}
         </div>
-
-        {/* Bottom Link */}
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
-          <span style={{ color: '#6b7280', fontSize: '14px' }}>
-            {activeTab === 'login' ? "Not a member? " : "Already have an account? "}
-            <button
-              onClick={() => setActiveTab(activeTab === 'login' ? 'signup' : 'login')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#ec4899',
-                fontWeight: '500',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                padding: '0',
-                fontSize: '14px',
-                fontFamily: 'inherit'
-              }}
-              onMouseOver={(e) => e.target.style.color = '#db2777'}
-              onMouseOut={(e) => e.target.style.color = '#ec4899'}
-            >
-              {activeTab === 'login' ? 'Signup now' : 'Login now'}
-            </button>
-          </span>
+      
+        <div className="text-center mt-8 text-xs text-gray-500">
+          By continuing, you agree to our <span className="text-purple-600 hover:text-pink-500 cursor-pointer">Terms of Service</span> and <span className="text-purple-600 hover:text-pink-500 cursor-pointer">Privacy Policy</span>.
         </div>
       </div>
     </div>

@@ -1,0 +1,296 @@
+/* Common component styles - Warm Minimalist Theme */
+
+/* Journal card styles */
+.journal-card {
+  transition: transform var(--transition-normal) var(--transition-ease), 
+              box-shadow var(--transition-normal) var(--transition-ease),
+              border-color var(--transition-normal) var(--transition-ease);
+  border: 1px solid var(--neutral-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.journal-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -8px rgba(49, 43, 38, 0.08), 0 8px 16px -6px rgba(49, 43, 38, 0.05);
+  border-color: var(--neutral-300);
+}
+
+.journal-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(to bottom, var(--primary), var(--accent));
+  transition: height var(--transition-normal) var(--transition-ease);
+}
+
+.journal-card:hover::after {
+  height: 100%;
+}
+
+/* Button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal) var(--transition-ease);
+  font-weight: 500;
+  font-family: var(--font-family-sans);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  gap: 0.5rem;
+}
+
+.btn svg {
+  flex-shrink: 0;
+  transition: transform var(--transition-normal) var(--transition-ease);
+}
+
+.btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* SVG icon size normalization */
+.icon-xs {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-sm {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon-md {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon-lg {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Fix for large SVGs that might overflow */
+.large-svg-container, 
+.card svg, 
+.card-glass svg,
+.container-app > svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Ensure SVGs scale properly within their containers */
+svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Journal specific components */
+.journal-date {
+  font-family: var(--font-family-sans);
+  font-size: 0.875rem;
+  color: var(--neutral-500);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.journal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.journal-tag {
+  background-color: rgba(113, 143, 117, 0.1);
+  color: var(--secondary-dark);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-family: var(--font-family-sans);
+  border: 1px solid rgba(113, 143, 117, 0.2);
+  transition: all var(--transition-normal) var(--transition-ease);
+}
+
+.journal-tag:hover {
+  background-color: rgba(113, 143, 117, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Empty state styles */
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  background-color: var(--neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--neutral-300);
+}
+
+.empty-state-icon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--neutral-400);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--space-6);
+  stroke-width: 1;
+}
+
+.empty-state-title {
+  font-family: var(--font-family);
+  font-size: 1.25rem;
+  color: var(--neutral-700);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.empty-state-message {
+  color: var(--neutral-600);
+  margin-bottom: 2rem;
+  font-family: var(--font-family-sans);
+  max-width: 24rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Animation utilities */
+.transition-standard {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: var(--transition-ease);
+  transition-duration: var(--transition-normal);
+}
+
+/* Additional micro-interactions */
+.btn-bounce {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.btn-bounce:hover {
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -150%;
+  bottom: 0;
+  left: -150%;
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.3) 50%, 
+    rgba(255,255,255,0) 100%);
+  transform: rotate(45deg);
+  animation: shimmerEffect 3s infinite;
+}
+
+@keyframes shimmerEffect {
+  from { transform: translateX(-100%) rotate(45deg); }
+  to { transform: translateX(100%) rotate(45deg); }
+}
+
+.scale-hover {
+  transition: transform var(--transition-normal) var(--transition-ease);
+}
+
+.scale-hover:hover {
+  transform: scale(1.03);
+}
+
+/* Interactive card styles */
+.card-interactive {
+  cursor: pointer;
+  transform-origin: center;
+  transition: all var(--transition-normal) var(--transition-ease);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-light);
+}
+
+.card-interactive:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+/* Spotlight effect */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255,255,255,0.2) 0%,
+    rgba(255,255,255,0) 80%
+  );
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s, transform 0.5s;
+  pointer-events: none;
+}
+
+.spotlight:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tab transition effects */
+.tab-transition {
+  transition: all var(--transition-normal) var(--transition-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-transition::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary);
+  transition: width var(--transition-normal) var(--transition-ease),
+              left var(--transition-normal) var(--transition-ease);
+}
+
+.tab-transition:hover::after {
+  width: 100%;
+  left: 0;
+}

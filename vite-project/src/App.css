@@ -1,10 +1,124 @@
+/* Global styles for warm minimalist theme */
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  min-height: 100vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  font-family: var(--font-family);
+  color: var(--neutral-800);
+  background-color: var(--neutral-50);
+}
+
+/* Fix SVG scaling issues */
+svg {
+  box-sizing: content-box;
+  max-width: 100%;
+  max-height: 100vh; /* Limit to viewport height */
+  width: auto; /* Allow natural sizing where possible */
+  height: auto; /* Allow natural sizing where possible */
+}
+
+/* Direct child SVG of body or root gets additional constraints */
+body > svg, #root > svg, div:only-child > svg:not(.icon-xs):not(.icon-sm):not(.icon-md):not(.icon-lg):not(.message-icon):not(.user-icon):not(.lock-icon):not(.spinner-icon) {
+  width: auto;
+  height: auto;
+  max-width: 250px;
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Login page specific SVG adjustments */
+.login-container svg {
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  flex-shrink: 0;
+}
+
+/* Input icon specific adjustments */
+.input-icon svg {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  flex-shrink: 0;
+}
+
+/* Allow centered text only where needed - not app-wide */
+.text-center {
+  text-align: center;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Links - global styles */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-normal) var(--transition-ease);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Helper classes for animations */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Disable animations for people who prefer reduced motion */
+@media (prefers-reduced-motion) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Fix container sizes for better responsive layout */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 

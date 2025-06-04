@@ -1,0 +1,493 @@
+/* JournalApp Theme - Warm Minimalist Design */
+
+:root {
+  /* Color system - Warm minimalist palette */
+  --primary: #a67c52; /* Warm brown */
+  --primary-light: #c4a68a;
+  --primary-dark: #7d5a3c;
+  --secondary: #718f75; /* Muted sage green */
+  --secondary-light: #9cb5a0;
+  --secondary-dark: #4a6b4e;
+  --accent: #d4a373; /* Warm sand */
+  
+  /* Warm Neutrals */
+  --neutral-50: #faf8f5; /* Cream */
+  --neutral-100: #f5f1ea;
+  --neutral-200: #e9e1d7;
+  --neutral-300: #d5cbbe;
+  --neutral-400: #b7aa9a;
+  --neutral-500: #96887a;
+  --neutral-600: #7c6e60;
+  --neutral-700: #665a4f;
+  --neutral-800: #4a403a;
+  --neutral-900: #312b26;
+    /* Functional colors - Softer versions */
+  --success: #84a98c; /* Soft green */
+  --error: #c26d66; /* Soft red */
+  --warning: #dda15e; /* Warm amber */
+  --info: #6d8ea0; /* Soft blue */
+  
+  /* Typography - Optimized for reading */
+  --font-family: 'Fraunces', 'Newsreader', Georgia, serif;
+  --font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+    /* Border radius - Slightly softer */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+  --radius-full: 9999px;
+  
+  /* Shadows - Softer, warmer shadows */
+  --shadow-sm: 0 2px 4px 0 rgba(49, 43, 38, 0.03);
+  --shadow: 0 2px 6px 0 rgba(49, 43, 38, 0.05), 0 1px 2px 0 rgba(49, 43, 38, 0.03);
+  --shadow-md: 0 4px 8px -1px rgba(49, 43, 38, 0.06), 0 2px 4px -1px rgba(49, 43, 38, 0.04);
+  --shadow-lg: 0 12px 20px -3px rgba(49, 43, 38, 0.07), 0 4px 8px -2px rgba(49, 43, 38, 0.04);
+  --shadow-xl: 0 20px 30px -5px rgba(49, 43, 38, 0.05), 0 10px 15px -5px rgba(49, 43, 38, 0.03);
+  
+  /* Glass morphism effects */
+  --glass-background: rgba(250, 248, 245, 0.6);
+  --glass-background-dark: rgba(49, 43, 38, 0.75);
+  --glass-backdrop: blur(12px) saturate(180%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Transitions - Smoother for calm micro-interactions */
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+  --transition-slow: 450ms;
+  --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Dark mode variables */
+  --dark-bg: #232221;
+  --dark-surface: #2d2b29;
+  --dark-surface-lighter: #38352f;
+  --dark-text: #e5e0d8;
+  --dark-text-muted: #b0a99e;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --neutral-50: var(--dark-bg);
+    --neutral-100: var(--dark-surface);
+    --neutral-200: var(--dark-surface-lighter);
+    --neutral-800: var(--dark-text);
+    --neutral-700: var(--dark-text-muted);
+    --neutral-600: #a29a8f;
+    
+    /* Adjust for dark mode */
+    --primary-light: #c4a68a;
+    --secondary-light: #9cb5a0;
+  }
+  
+  .card {
+    background-color: var(--dark-surface);
+    border: 1px solid var(--dark-surface-lighter);
+  }
+}
+
+/* Background gradients - Warmer, more subtle */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 50%, var(--accent) 100%);
+}
+
+.bg-gradient-light {
+  background: linear-gradient(135deg, var(--neutral-50) 0%, var(--neutral-100) 50%, rgba(212, 163, 115, 0.1) 100%);
+}
+
+/* Card styles - Warm minimalist approach */
+.card {
+  background-color: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--neutral-200);
+  transition: transform var(--transition-normal) var(--transition-ease), 
+              box-shadow var(--transition-normal) var(--transition-ease),
+              border-color var(--transition-normal) var(--transition-ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--neutral-300);
+  transform: translateY(-2px);
+}
+
+/* Glass card variation */
+.card-glass {
+  background-color: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: var(--glass-border);
+}
+
+/* Button styles - Warm, subtle */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-family: var(--font-family-sans);
+  transition: all var(--transition-normal) var(--transition-ease);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-light);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-family: var(--font-family-sans);
+  transition: all var(--transition-normal) var(--transition-ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(196, 166, 138, 0.1);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:active {
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background-color: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-family: var(--font-family-sans);
+  transition: all var(--transition-normal) var(--transition-ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-danger:hover {
+  background-color: var(--error);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-danger:active {
+  transform: translateY(-1px);
+}
+
+/* Text button */
+.btn-text {
+  background-color: transparent;
+  color: var(--primary);
+  padding: 0.5rem 0.75rem;
+  font-weight: 500;
+  font-family: var(--font-family-sans);
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal) var(--transition-ease);
+  position: relative;
+}
+
+.btn-text:hover {
+  background-color: rgba(166, 124, 82, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-text:active {
+  transform: translateY(0);
+}
+
+/* Form elements - Clean, warm aesthetic */
+.form-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-50);
+  color: var(--neutral-800);
+  font-family: var(--font-family-sans);
+  transition: all var(--transition-normal) var(--transition-ease);
+  line-height: 1.5;
+  display: block;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.15);
+  background-color: white;
+}
+
+.focus-ring:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.15);
+}
+
+/* Layout classes - Optimized for readability */
+.container-app {
+  width: 100%;
+  max-width: 1120px; /* Slightly narrower for better readability */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (max-width: 639px) {
+  .container-app {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .container-app {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-app {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Content container with max-width for readability */
+.content-container {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Journal page specific layout */
+.journal-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .journal-layout {
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Grid layouts */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-1-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid-1-2 {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* Typography - Clean, readable styles optimized for journaling */
+.heading-xl, .heading-lg, .heading-md, .heading-sm {
+  font-family: var(--font-family);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin-bottom: 1.5rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.heading-xl {
+  font-size: 2.5rem;
+}
+
+.heading-lg {
+  font-family: var(--font-family);
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin-bottom: 1.25rem;
+}
+
+.heading-md {
+  font-family: var(--font-family);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin-bottom: 1rem;
+}
+
+.heading-sm {
+  font-family: var(--font-family);
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin-bottom: 0.75rem;
+}
+
+.body-lg {
+  font-family: var(--font-family);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--neutral-700);
+}
+
+.body-md {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--neutral-700);
+}
+
+.body-sm {
+  font-family: var(--font-family-sans);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--neutral-600);
+}
+
+/* Warm subtle text gradients */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Badge styles - Softer, integrated with theme */
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  font-family: var(--font-family-sans);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+}
+
+.badge-primary {
+  background-color: rgba(166, 124, 82, 0.15);
+  color: var(--primary-dark);
+  border-color: rgba(166, 124, 82, 0.3);
+}
+
+.badge-secondary {
+  background-color: rgba(113, 143, 117, 0.15);
+  color: var(--secondary-dark);
+  border-color: rgba(113, 143, 117, 0.3);
+}
+
+.badge-accent {
+  background-color: rgba(212, 163, 115, 0.15);
+  color: #b07f46;
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+/* Input focus enhancements */
+.focus-ring {
+  transition: box-shadow var(--transition-normal);
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.2);
+}
+
+/* Spacing utilities */
+.section {
+  margin-bottom: var(--space-12);
+}
+
+.section-sm {
+  margin-bottom: var(--space-6);
+}
+
+.section-lg {
+  margin-bottom: var(--space-20);
+}
+
+/* Journal editor styles */
+.journal-editor {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--neutral-200);
+  padding: var(--space-6);
+  font-family: var(--font-family);
+  font-size: 1.125rem;
+  line-height: 1.8;
+  min-height: 240px;
+  transition: border-color var(--transition-normal);
+}
+
+.journal-editor:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+/* Micro-interactions */
+.hover-lift {
+  transition: transform var(--transition-normal) var(--transition-ease);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(166, 124, 82, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(166, 124, 82, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(166, 124, 82, 0);
+  }
+}
